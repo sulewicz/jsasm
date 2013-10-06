@@ -1,0 +1,110 @@
+body {
+    background-color: #FFCD4B;
+    text-align: center;
+}
+
+#main {
+    width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#workspace {
+    height: 350px;
+}
+
+#footer {
+    font-family: Arial;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+#help {
+    font-family: Arial;
+    text-align: left;
+    font-size: 14px;
+}
+
+#help > h3 {
+    font-size: 16px;
+}
+
+#help table {
+    width: 100%;
+}
+
+#help th.first {
+    width: 15%;
+}
+
+#help th.second {
+    width: 45%;
+}
+
+#help th.third {
+    width: 40%;
+}
+
+#panel {
+    width: 500px;
+    display: inline-block;
+    font-family: Arial;
+    font-size: 12px;
+    text-align: center;
+}
+
+#error {
+    display: none;
+    max-width: 200px;
+    color: #FFFFFF;
+    background-color: #EE0000;
+    margin: 5px;
+    padding: 5px;
+}
+
+#panel table {
+    width: 100%;
+}
+
+table {
+    background-color: F6A828;
+    padding: 0;
+    margin: 0;
+}
+
+table th,td {
+    padding: 5px;
+    margin: 0;
+}
+table th {
+    border: 1px solid #E78F08;
+}
+table td {
+    border: 1px solid #E78F08;
+}
+
+td.highlight {
+    background-color: #E78F08;
+}
+
+.curLine {
+    background-color: #FFEF6D;
+}
+
+.errLine {
+    background-color: #FF0000;
+}
+
+#memory th,td {
+    min-width: 20px;
+    max-width: 20px;
+}
+
+#editor {
+    display: inline-block;
+    text-align: left;
+    float:left;
+    background-color: #FFFFFF;
+    width: 500px;
+    height: 310px;
+}

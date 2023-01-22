@@ -7,17 +7,19 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" lang="pl">
+
 <head>
-  <title>JSAsm</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <link href="css/main.css" media="screen" rel="stylesheet" type="text/css" />
-  <link rel="stylesheet" href="css/codemirror.css">
-  <script type="text/javascript" charset="utf-8" src="js/codemirror.js"></script>
-  <script type="text/javascript" charset="utf-8" src="js/z80.js"></script>
-  <script type="text/javascript" charset="utf-8" src="js/ui.js"></script>
-  <script type="text/javascript" charset="utf-8" src="js/vm.js"></script>
-  <script type="text/javascript" charset="utf-8" src="js/main.js"></script>
+    <title>JSAsm</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="css/main.css" media="screen" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="css/codemirror.css">
+    <script type="text/javascript" charset="utf-8" src="js/codemirror.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/z80.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/ui.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/vm.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/main.js"></script>
 </head>
+
 <body>
     <div id="main">
         <div id="workspace">
@@ -31,52 +33,148 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
                 <div id="registers">
                     <table>
-                        <tr><th colspan="4">Registers</th></tr>
-                        <tr><th>R0</th><th>R1</th><th>R2</th><th>R3</th></tr>
-                        <tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                        <tr>
+                            <th colspan="4">Registers</th>
+                        </tr>
+                        <tr>
+                            <th>R0</th>
+                            <th>R1</th>
+                            <th>R2</th>
+                            <th>R3</th>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
                     </table>
                 </div>
                 <div id="memory">
                     <table>
-                        <tr><th colspan="11">Memory</th></tr>
-                        <tr><th>&nbsp;</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr>
-                        <tr><th>00</th><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-                        <tr><th>10</th><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-                        <tr><th>20</th><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-                        <tr><th>30</th><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                        <tr>
+                            <th colspan="11">Memory</th>
+                        </tr>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>0</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>4</th>
+                            <th>5</th>
+                            <th>6</th>
+                            <th>7</th>
+                            <th>8</th>
+                            <th>9</th>
+                        </tr>
+                        <tr>
+                            <th>00</th>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <th>10</th>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <th>20</th>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <th>30</th>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
                     </table>
                 </div>
                 <div id="error"></div>
             </div>
         </div>
         <div id="help">
+            <div id="links">
+                <a id="bmc" href="https://www.buymeacoffee.com/coderoller" target="_blank">
+                    <img src="img/bmc.png" height="32" />
+                </a>
+                <a id="gh" href="https://github.com/sulewicz/jsasm" target="_blank">
+                    <img src="img/github-mark.png" height="32" />
+                </a>
+            </div>
             <h3>Instructions</h3>
             <table>
-                <tr><th class="first">Instruction</th><th class="second">Description</th><th class="third">Example</th></tr>
+                <tr>
+                    <th class="first">Instruction</th>
+                    <th class="second">Description</th>
+                    <th class="third">Example</th>
+                </tr>
                 <tr>
                     <td>MOV <i>destination</i>,<i>source</i></td>
-                    <td>Copies the constant or the value from the address pointed by <i>source</i> to the address pointed by <i>destination</i>, <i>destination</i> cannot be a constant.</td>
-                    <td>MOV #5,23 - Copies 23 to the memory cell with address 5.<br>MOV R1,#15 - Copies value from memory cell with address 15 to register R1.</td>
+                    <td>Copies the constant or the value from the address pointed by <i>source</i> to the address
+                        pointed by <i>destination</i>, <i>destination</i> cannot be a constant.</td>
+                    <td>MOV #5,23 - Copies 23 to the memory cell with address 5.<br>MOV R1,#15 - Copies value from
+                        memory cell with address 15 to register R1.</td>
                 </tr>
                 <tr>
                     <td>ADD <i>destination</i>,<i>source</i></td>
-                    <td>Adds <i>destination</i> and <i>source</i> and stores the result in register or address pointed by <i>destination</i>, because of that <i>destination</i> cannot be a constant.</td>
-                    <td>ADD R0,5 - Adds the content of register R0 and constant 5 and stores the result in register R0.</td>
+                    <td>Adds <i>destination</i> and <i>source</i> and stores the result in register or address pointed
+                        by <i>destination</i>, because of that <i>destination</i> cannot be a constant.</td>
+                    <td>ADD R0,5 - Adds the content of register R0 and constant 5 and stores the result in register R0.
+                    </td>
                 </tr>
                 <tr>
                     <td>SUB <i>destination</i>,<i>source</i></td>
-                    <td>Subtracts <i>source</i> from <i>destination</i> and stores the result in register or address pointed by <i>destination</i>, because of that <i>destination</i> cannot be a constant.</td>
-                    <td>SUB R0,5 - Subtracts 5 from the content of register R0 and stores the result in register R0.</td>
+                    <td>Subtracts <i>source</i> from <i>destination</i> and stores the result in register or address
+                        pointed by <i>destination</i>, because of that <i>destination</i> cannot be a constant.</td>
+                    <td>SUB R0,5 - Subtracts 5 from the content of register R0 and stores the result in register R0.
+                    </td>
                 </tr>
                 <tr>
                     <td>MUL <i>destination</i>,<i>source</i></td>
-                    <td>Multiplies <i>destination</i> and <i>source</i> and stores the result in register or address pointed by <i>destination</i>, because of that <i>destination</i> cannot be a constant.</td>
-                    <td>MUL R0,5 - Multiplies the content of register R0 and constant 5 and stores the result in register R0.</td>
+                    <td>Multiplies <i>destination</i> and <i>source</i> and stores the result in register or address
+                        pointed by <i>destination</i>, because of that <i>destination</i> cannot be a constant.</td>
+                    <td>MUL R0,5 - Multiplies the content of register R0 and constant 5 and stores the result in
+                        register R0.</td>
                 </tr>
                 <tr>
                     <td>DIV <i>destination</i>,<i>source</i></td>
-                    <td>Divides <i>destination</i> by <i>source</i> and stores the result in register or address pointed by <i>destination</i>, because of that <i>destination</i> cannot be a constant.</td>
-                    <td>DIV R0,5 - Divides the content of register R0 by constant 5 and stores the result in register R0.</td>
+                    <td>Divides <i>destination</i> by <i>source</i> and stores the result in register or address pointed
+                        by <i>destination</i>, because of that <i>destination</i> cannot be a constant.</td>
+                    <td>DIV R0,5 - Divides the content of register R0 by constant 5 and stores the result in register
+                        R0.</td>
                 </tr>
                 <tr>
                     <td>JMP <i>line</i></td>
@@ -85,38 +183,48 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 </tr>
                 <tr>
                     <td>JZ <i>line</i></td>
-                    <td>Conditional jump. Causes jump to the specified <i>line</i>, only if the result of last instruction was <b>equal</b> to 0.</td>
+                    <td>Conditional jump. Causes jump to the specified <i>line</i>, only if the result of last
+                        instruction was <b>equal</b> to 0.</td>
                     <td>JZ 0 - Jumps to the first instruction.</td>
                 </tr>
                 <tr>
                     <td>JNZ <i>line</i></td>
-                    <td>Conditional jump. Causes jump to the specified <i>line</i>, only if the result of last instruction was <b>not equal</b> to 0.</td>
+                    <td>Conditional jump. Causes jump to the specified <i>line</i>, only if the result of last
+                        instruction was <b>not equal</b> to 0.</td>
                     <td>JNZ 0 - Jumps to the first instruction.</td>
                 </tr>
                 <tr>
                     <td>JG <i>line</i></td>
-                    <td>Conditional jump. Causes jump to the specified <i>line</i>, only if the result of last instruction was <b>greater</b> than 0 ( &gt; ).</td>
+                    <td>Conditional jump. Causes jump to the specified <i>line</i>, only if the result of last
+                        instruction was <b>greater</b> than 0 ( &gt; ).</td>
                     <td>JG 0 - Jumps to the first instruction.</td>
                 </tr>
                 <tr>
                     <td>JNG <i>line</i></td>
-                    <td>Conditional jump. Causes jump to the specified <i>line</i>, only if the result of last instruction was <b>not greater</b> than 0 ( &lt;= ).</td>
+                    <td>Conditional jump. Causes jump to the specified <i>line</i>, only if the result of last
+                        instruction was <b>not greater</b> than 0 ( &lt;= ).</td>
                     <td>JNG 0 - Jumps to the first instruction.</td>
                 </tr>
                 <tr>
                     <td>JL <i>line</i></td>
-                    <td>Conditional jump. Causes jump to the specified <i>line</i>, only if the result of last instruction was <b>less</b> than 0 ( &lt; ).</td>
+                    <td>Conditional jump. Causes jump to the specified <i>line</i>, only if the result of last
+                        instruction was <b>less</b> than 0 ( &lt; ).</td>
                     <td>JL 0 - Jumps to the first instruction.</td>
                 </tr>
                 <tr>
                     <td>JNL <i>line</i></td>
-                    <td>Conditional jump. Causes jump to the specified <i>line</i>, only if the result of last instruction was <b>not less</b> than 0 ( &gt;= ).</td>
+                    <td>Conditional jump. Causes jump to the specified <i>line</i>, only if the result of last
+                        instruction was <b>not less</b> than 0 ( &gt;= ).</td>
                     <td>JNL 0 - Jumps to the first instruction.</td>
                 </tr>
             </table>
             <h3>Addresses</h3>
             <table>
-                <tr><th class="first">Format</th><th class="second">Description</th><th class="third">Example</th></tr>
+                <tr>
+                    <th class="first">Format</th>
+                    <th class="second">Description</th>
+                    <th class="third">Example</th>
+                </tr>
                 <tr>
                     <td><b>#</b><i>value</i></td>
                     <td>Describes memory address. Accepted values are 0 - 39.</td>
@@ -129,12 +237,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 </tr>
                 <tr>
                     <td><b>@R</b><i>value</i></td>
-                    <td>Describes memory address, which is stored in the given processor register. Accepted values are 0 - 3.</td>
+                    <td>Describes memory address, which is stored in the given processor register. Accepted values are 0
+                        - 3.</td>
                     <td>@R2 - Assuming that R2 contains 1, it will be the address of the second byte in the memory.</td>
                 </tr>
             </table>
         </div>
-        <div id="footer">Copyright (C) 2013 Szymon Ulewicz</div>
+        <div id="footer">Copyright (C) 2023 Szymon Ulewicz</div>
     </div>
 </body>
+
 </html>

@@ -21,11 +21,11 @@ body {
 
 #help {
     font-family: Arial;
-    text-align: left;
+    text-align: center;
     font-size: 14px;
 }
 
-#help > h3 {
+#help>h3 {
     font-size: 16px;
 }
 
@@ -72,13 +72,16 @@ table {
     margin: 0;
 }
 
-table th,td {
+table th,
+td {
     padding: 5px;
     margin: 0;
 }
+
 table th {
     border: 1px solid #E78F08;
 }
+
 table td {
     border: 1px solid #E78F08;
 }
@@ -95,16 +98,28 @@ td.highlight {
     background-color: #FF0000;
 }
 
-#memory th,td {
+#memory th,
+td {
     min-width: 20px;
     max-width: 20px;
 }
 
 #editor {
-    display: inline-block;
+    display: block;
     text-align: left;
-    float:left;
+    float: left;
     background-color: #FFFFFF;
     width: 500px;
     height: 310px;
+}
+
+a,
+a:visited,
+a:hover,
+a:active {
+    text-decoration: none;
+}
+
+#links img {
+    margin: 5px;
 }

@@ -29,7 +29,7 @@ jsasm.ui = (function() {
         if (!vm.initialized) {
             vm.init(cm.getValue());
             resetBtn.disabled = "";
-            runBtn.disabled = "disabled";
+            runBtn.disabled = "";
         }
         var ret = vm.step();
         if (ret.end || ret.error) {
@@ -41,22 +41,24 @@ jsasm.ui = (function() {
     }
 
     function run() {
-        vm.reset();
-        vm.init(cm.getValue());
+        if (!vm.initialized) {
+            vm.reset();
+            vm.init(cm.getValue());
+        }
+
         resetBtn.disabled = "";
         stepBtn.disabled = "disabled";
         runBtn.disabled = "disabled";
+
         (function() {
-            if (vm.initialized) {
-                var ret = vm.step();
-                refresh(ret);
-                if (ret.end || ret.error) {
-                    resetBtn.disabled = "";
-                    stepBtn.disabled = "disabled";
-                    runBtn.disabled = "disabled";
-                } else {
-                    setTimeout(arguments.callee, STEP_TIMEOUT);
-                }
+            var ret = vm.step();
+            refresh(ret);
+            if (ret.end || ret.error) {
+                resetBtn.disabled = "";
+                stepBtn.disabled = "disabled";
+                runBtn.disabled = "disabled";
+            } else {
+                setTimeout(arguments.callee, STEP_TIMEOUT);
             }
         })();
     }

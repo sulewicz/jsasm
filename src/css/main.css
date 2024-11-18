@@ -110,7 +110,15 @@ td {
     float: left;
     background-color: #FFFFFF;
     width: 500px;
-    height: 310px;
+    height: 330px;
+}
+
+#controls, #filesystem {
+    margin: 10px;
+}
+
+#filesystem select {
+    min-width: 300px;
 }
 
 a,

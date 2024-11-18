@@ -1,28 +1,39 @@
 jsasm = self.jsasm || {};
 jsasm.ui = (function () {
-    var cm, vm, fs, runBtn, stepBtn, resetBtn, curReg = -1, curMem = -1, curLine = -1, errLine = -1, memCells, regCells, errorCell;
+    var cm, vm, runBtn, stepBtn, resetBtn, curReg = -1, curMem = -1, curLine = -1, errLine = -1, memCells, regCells, errorCell;
+    var fs, newBtn, deleteBtn, fileSelect;
     var STEP_TIMEOUT = 100;
     function init(_vm, _fs) {
         fs = _fs;
         vm = _vm;
-        var current = fs.load_current();
-        cm = CodeMirror(document.getElementById("editor"), { firstLineNumber: 0, lineNumbers: true, mode: 'z80', value: current.content });
+        cm = CodeMirror(document.getElementById("editor"), { firstLineNumber: 0, lineNumbers: true, mode: 'z80' });
         runBtn = document.getElementById("run_btn");
-        runBtn.addEventListener('click', run);
+        runBtn.addEventListener("click", run);
         stepBtn = document.getElementById("step_btn");
-        stepBtn.addEventListener('click', step);
+        stepBtn.addEventListener("click", step);
         resetBtn = document.getElementById("reset_btn");
         resetBtn.disabled = "disabled";
-        resetBtn.addEventListener('click', reset);
+        resetBtn.addEventListener("click", reset);
         memCells = document.getElementById("memory").getElementsByTagName("td");
         regCells = document.getElementById("registers").getElementsByTagName("td");
         errorCell = document.getElementById("error");
+        newBtn = document.getElementById("new_btn");
+        newBtn.addEventListener("click", new_file);
+        deleteBtn = document.getElementById("delete_btn");
+        deleteBtn.addEventListener("click", delete_file);
+        fileSelect = document.getElementById("file_select");
+        reload_filesystem();
+        fileSelect.addEventListener("change", file_changed);
+        cm.on("change", content_changed);
     }
 
     function reset() {
         resetBtn.disabled = "disabled";
         stepBtn.disabled = "";
         runBtn.disabled = "";
+        newBtn.disabled = "";
+        deleteBtn.disabled = "";
+        fileSelect.disabled = "";
         vm.reset();
         refresh();
     }
@@ -32,6 +43,9 @@ jsasm.ui = (function () {
             vm.init(cm.getValue());
             resetBtn.disabled = "";
             runBtn.disabled = "disabled";
+            newBtn.disabled = "disabled";
+            deleteBtn.disabled = "disabled";
+            fileSelect.disabled = "disabled";
         }
         var ret = vm.step();
         if (ret.end || ret.error) {
@@ -42,12 +56,54 @@ jsasm.ui = (function () {
         refresh(ret);
     }
 
+    function new_file() {
+        var name = prompt("Provide file name:");
+        if (!name) {
+            return;
+        }
+        if (fs.exists(name)) {
+            alert("File already exists!");
+            return;
+        }
+        fs.save(name, "");
+        reload_filesystem();
+    }
+
+    function delete_file() {
+        if (confirm("Are you sure you want to delete the current file?")) {
+            fs.delete(fileSelect.value);
+        }
+        reload_filesystem();
+    }
+
+    function file_changed(e) {
+        var name = e.target.value;
+        cm.setValue(fs.load(name).content);
+    }
+
+    function reload_filesystem() {
+        fileSelect.options.length = 0;
+        fs.list().forEach(element => {
+            fileSelect.appendChild(new Option(element, element));
+        });
+        var latest = fs.load_latest();
+        fileSelect.value = latest.name;
+        cm.setValue(latest.content);
+    }
+
+    function content_changed(e) {
+        fs.save_latest(cm.getValue());
+    }
+
     function run() {
         vm.reset();
         vm.init(cm.getValue());
         resetBtn.disabled = "";
         stepBtn.disabled = "disabled";
         runBtn.disabled = "disabled";
+        newBtn.disabled = "disabled";
+        deleteBtn.disabled = "disabled";
+        fileSelect.disabled = "disabled";
         (function () {
             if (vm.initialized) {
                 var ret = vm.step();

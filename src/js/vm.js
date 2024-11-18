@@ -1,5 +1,5 @@
 jsasm = self.jsasm || {};
-jsasm.VM = (function() {
+jsasm.VM = (function () {
     var MEM_SIZE = 40;
     var REG_SIZE = 4;
 
@@ -18,7 +18,7 @@ jsasm.VM = (function() {
         };
     }
 
-    var binary_op = function(operator, args) {
+    var binary_op = function (operator, args) {
         var t = this;
         if (args.length !== 2) {
             t.ret.error = "Incorrect number of arguments";
@@ -32,7 +32,7 @@ jsasm.VM = (function() {
         }
     }
 
-    var jump = function(cond, args) {
+    var jump = function (cond, args) {
         var t = this, line = 0 | args[0];
         if (!isFinite(args[0]) || line < 0 || line >= t.code.length) {
             t.ret.error = "Incorrect instruction location";
@@ -44,7 +44,7 @@ jsasm.VM = (function() {
     }
 
     COMMANDS = {
-        mov: function(args) {
+        mov: function (args) {
             var t = this;
             if (args.length !== 2) {
                 t.ret.error = "Incorrect number of arguments";
@@ -69,7 +69,7 @@ jsasm.VM = (function() {
         jnl: jump.curry('>=')
     };
 
-    var VM = function() {
+    var VM = function () {
         if (!(this instanceof arguments.callee)) {
             return new arguments.callee();
         }
@@ -78,13 +78,13 @@ jsasm.VM = (function() {
     }
 
     VM.prototype = {
-        init: function(code) {
+        init: function (code) {
             var t = this;
             t.code = code.split('\n');
             t.initialized = true;
         },
 
-        run: function() {
+        run: function () {
             var t = this, ret;
             while (t.line < t.code.length) {
                 ret = t.step();
@@ -95,7 +95,7 @@ jsasm.VM = (function() {
             return ret;
         },
 
-        reset: function() {
+        reset: function () {
             var t = this;
             t.initialized = false;
             t.last_val = 0;
@@ -111,7 +111,7 @@ jsasm.VM = (function() {
             }
         },
 
-        step: function() {
+        step: function () {
             var t = this, ret = (t.ret = {});
             if (t.line >= t.code.length) {
                 ret.end = true;
@@ -130,7 +130,7 @@ jsasm.VM = (function() {
             return ret;
         },
 
-        process: function(line, no) {
+        process: function (line, no) {
             var t = this, ret = t.ret;
             line = line.trim();
             if (line.length > 0 && line[0] !== '#') {
@@ -153,7 +153,7 @@ jsasm.VM = (function() {
             }
         },
 
-        getval: function(argument) {
+        getval: function (argument) {
             var t = this, idx;
             if (argument.indexOf('@R') === 0) {
                 idx = t.get_reg_mem_index(argument);
@@ -177,7 +177,7 @@ jsasm.VM = (function() {
             }
         },
 
-        setval: function(argument, value) {
+        setval: function (argument, value) {
             var t = this, idx;
             if (argument.indexOf('@R') === 0) {
                 idx = t.get_reg_mem_index(argument);
@@ -201,7 +201,7 @@ jsasm.VM = (function() {
             t.last_val = value;
         },
 
-        get_mem_index: function(argument) {
+        get_mem_index: function (argument) {
             var t = this, ret = 0 | argument.substr(1);
             if (ret < 0 || ret >= MEM_SIZE) {
                 t.ret.error = "Incorrect address: " + argument;
@@ -210,7 +210,7 @@ jsasm.VM = (function() {
             return ret;
         },
 
-        get_reg_mem_index: function(argument) {
+        get_reg_mem_index: function (argument) {
             var t = this, ret = t.get_reg_index(argument.substr(1));
             if (ret == null) return null;
             ret = t.regs[ret];
@@ -221,7 +221,7 @@ jsasm.VM = (function() {
             return ret;
         },
 
-        get_reg_index: function(argument) {
+        get_reg_index: function (argument) {
             var t = this, ret = 0 | argument.substr(1);
             if (ret < 0 || ret >= REG_SIZE) {
                 t.ret.error = "Incorrect register: " + argument;

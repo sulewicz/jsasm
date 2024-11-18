@@ -1,5 +1,5 @@
 jsasm = self.jsasm || {};
-jsasm.ui = (function() {
+jsasm.ui = (function () {
     var cm, vm, runBtn, stepBtn, resetBtn, curReg = -1, curMem = -1, curLine = -1, errLine = -1, memCells, regCells, errorCell;
     var STEP_TIMEOUT = 100;
     function init(_vm) {
@@ -46,7 +46,7 @@ jsasm.ui = (function() {
         resetBtn.disabled = "";
         stepBtn.disabled = "disabled";
         runBtn.disabled = "disabled";
-        (function() {
+        (function () {
             if (vm.initialized) {
                 var ret = vm.step();
                 refresh(ret);

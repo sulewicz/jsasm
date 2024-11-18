@@ -1,7 +1,7 @@
 jsasm = self.jsasm || {};
 jsasm.ui = (function () {
     var cm, vm, runBtn, stepBtn, resetBtn, curReg = -1, curMem = -1, curLine = -1, errLine = -1, memCells, regCells, errorCell;
-    var fs, newBtn, deleteBtn, fileSelect;
+    var fs, newBtn, deleteBtn, clearStorageBtn, fileSelect;
     var STEP_TIMEOUT = 100;
     function init(_vm, _fs) {
         fs = _fs;
@@ -21,6 +21,8 @@ jsasm.ui = (function () {
         newBtn.addEventListener("click", new_file);
         deleteBtn = document.getElementById("delete_btn");
         deleteBtn.addEventListener("click", delete_file);
+        clearStorageBtn = document.getElementById("clear_storage_btn");
+        clearStorageBtn.addEventListener("click", clear_storage);
         fileSelect = document.getElementById("file_select");
         reload_filesystem();
         fileSelect.addEventListener("change", file_changed);
@@ -33,6 +35,7 @@ jsasm.ui = (function () {
         runBtn.disabled = "";
         newBtn.disabled = "";
         deleteBtn.disabled = "";
+        clearStorageBtn.disabled = "";
         fileSelect.disabled = "";
         vm.reset();
         refresh();
@@ -45,6 +48,7 @@ jsasm.ui = (function () {
             runBtn.disabled = "disabled";
             newBtn.disabled = "disabled";
             deleteBtn.disabled = "disabled";
+            clearStorageBtn.disabled = "disabled";
             fileSelect.disabled = "disabled";
         }
         var ret = vm.step();
@@ -76,6 +80,13 @@ jsasm.ui = (function () {
         reload_filesystem();
     }
 
+    function clear_storage() {
+        if (confirm("Are you sure you want to clear your local storage and all created files?")) {
+            fs.reset();
+            reload_filesystem();
+        }
+    }
+
     function file_changed(e) {
         var name = e.target.value;
         cm.setValue(fs.load(name).content);
@@ -103,6 +114,7 @@ jsasm.ui = (function () {
         runBtn.disabled = "disabled";
         newBtn.disabled = "disabled";
         deleteBtn.disabled = "disabled";
+        clearStorageBtn.disabled = "disabled";
         fileSelect.disabled = "disabled";
         (function () {
             if (vm.initialized) {

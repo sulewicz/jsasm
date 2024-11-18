@@ -40,6 +40,14 @@ jsasm.FS = (function () {
             }
         },
 
+        reset: function () {
+            var t = this;
+            t.content = { ...samples };
+            t.entries = Object.keys(t.content).sort();
+            t.latest_entry = t.entries[0];
+            t.serialize();
+        },
+
         list: function () {
             var t = this;
             return [...t.entries];
@@ -56,6 +64,7 @@ jsasm.FS = (function () {
         load: function (name) {
             var t = this;
             t.latest_entry = name;
+            t.serialize();
             return {
                 "name": name,
                 "content": t.content[name]

@@ -113,12 +113,16 @@ td {
     height: 330px;
 }
 
+#clear_storage_btn {
+    background-color: #FFAAAA;
+}
+
 #controls, #filesystem {
     margin: 10px;
 }
 
 #filesystem select {
-    min-width: 300px;
+    min-width: 250px;
 }
 
 a,

@@ -1,10 +1,12 @@
 jsasm = self.jsasm || {};
 jsasm.ui = (function () {
-    var cm, vm, runBtn, stepBtn, resetBtn, curReg = -1, curMem = -1, curLine = -1, errLine = -1, memCells, regCells, errorCell;
+    var cm, vm, fs, runBtn, stepBtn, resetBtn, curReg = -1, curMem = -1, curLine = -1, errLine = -1, memCells, regCells, errorCell;
     var STEP_TIMEOUT = 100;
-    function init(_vm) {
+    function init(_vm, _fs) {
+        fs = _fs;
         vm = _vm;
-        cm = CodeMirror(document.getElementById("editor"), { firstLineNumber: 0, lineNumbers: true, mode: 'z80', value: "MOV R0,40\nMOV R1,R0\nSUB R1,1\nMOV @R1,R0\nSUB R0,1\nJNZ 2" });
+        var current = fs.load_current();
+        cm = CodeMirror(document.getElementById("editor"), { firstLineNumber: 0, lineNumbers: true, mode: 'z80', value: current.content });
         runBtn = document.getElementById("run_btn");
         runBtn.addEventListener('click', run);
         stepBtn = document.getElementById("step_btn");

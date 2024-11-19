@@ -10,7 +10,7 @@ body {
 }
 
 #workspace {
-    height: 350px;
+    height: 400px;
 }
 
 #footer {
@@ -110,7 +110,7 @@ td {
     float: left;
     background-color: #ffffff;
     width: 500px;
-    height: 330px;
+    height: 360px;
 }
 
 #clear_storage_btn {
@@ -119,7 +119,7 @@ td {
 
 #controls,
 #filesystem {
-    margin: 10px;
+    margin: 5px;
 }
 
 #filesystem select {

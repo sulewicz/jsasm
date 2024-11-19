@@ -10,7 +10,7 @@ body {
 }
 
 #workspace {
-    height: 400px;
+    height: 370px;
 }
 
 #footer {
@@ -110,7 +110,7 @@ td {
     float: left;
     background-color: #ffffff;
     width: 500px;
-    height: 360px;
+    height: 350px;
 }
 
 #clear_storage_btn {

@@ -1,6 +1,7 @@
 body {
     background-color: #ffcd4b;
     text-align: center;
+    color: #000000;
 }
 
 #main {
@@ -135,4 +136,27 @@ a:active {
 
 #links img {
     margin: 5px;
+}
+
+.dialog-popup {
+    color: #000000;
+    font-size: 18px;
+    font-family: Arial;
+    border: 1px solid #e78f08;
+    border-radius: 0;
+    background-color: #ffc42d;
+}
+
+.dialog-popup input {
+    font-size: 14px;
+    font-family: Arial;
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.dialog-popup .swal2-validation-message {
+    background-color: #ffc42d;
+    color: #000000;
+    font-size: 14px;
+    font-family: Arial;
 }

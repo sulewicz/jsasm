@@ -1,3 +1,5 @@
+import { Dialog } from "./dialog.js";
+
 var STEP_TIMEOUT = 100;
 
 class UI {
@@ -76,28 +78,29 @@ class UI {
         this.#refresh(ret);
     }
 
-    #new_file() {
-        var name = prompt("Provide file name:");
+    async #new_file() {
+        var name = await Dialog.showTextPrompt("Provide file name:");
         if (!name) {
             return;
         }
+        name = name.trim();
         if (this.#fs.exists(name)) {
-            alert("File already exists!");
+            await Dialog.showError("File already exists!");
             return;
         }
         this.#fs.save(name, "");
         this.#reload_filesystem();
     }
 
-    #delete_file() {
-        if (confirm("Are you sure you want to delete the current file?")) {
+    async #delete_file() {
+        if (await Dialog.showBooleanPrompt("Are you sure you want to delete the current file?")) {
             this.#fs.delete(this.#fileSelect.value);
         }
         this.#reload_filesystem();
     }
 
-    #clear_storage() {
-        if (confirm("Are you sure you want to clear your local storage and all created files?")) {
+    async #clear_storage() {
+        if (await Dialog.showBooleanPrompt("Are you sure you want to clear your local storage and all created files?")) {
             this.#fs.reset();
             this.#reload_filesystem();
         }

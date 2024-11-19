@@ -79,7 +79,7 @@ class UI {
     }
 
     async #new_file() {
-        var name = await Dialog.showTextPrompt("Provide file name:");
+        var name = await Dialog.showTextPrompt("Provide the file name:");
         if (!name) {
             return;
         }

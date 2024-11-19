@@ -160,3 +160,7 @@ a:active {
     font-size: 14px;
     font-family: Arial;
 }
+
+.dialog-popup button {
+    margin: 5px;
+}

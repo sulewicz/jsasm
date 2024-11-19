@@ -24,6 +24,10 @@ let binary_op = function (operator, args) {
         if ((op1 = this.getval(args[0])) == null || (op2 = this.getval(args[1])) == null) {
             return;
         } else {
+            if (operator === "/" && op2 === 0) {
+                this.ret.error = "Cannot divide by 0";
+                return;
+            }
             this.setval(args[0], ~~eval(op1 + operator + op2));
         }
     }

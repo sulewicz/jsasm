@@ -2,7 +2,7 @@ jsasm = self.jsasm || {};
 jsasm.FS = (function () {
     var samples = {
         "[Sample] Fill memory 1 to 40": "MOV R0,40\nMOV R1,R0\nSUB R1,1\nMOV @R1,R0\nSUB R0,1\nJNZ 2",
-        "[Sample] Add 5 to 5": "MOV R0,5\nADD R0,5"
+        "[Sample] Add 5 to 5": "MOV R0,5\nADD R0,5",
     };
     var sample_entries = Object.keys(samples);
 
@@ -12,7 +12,7 @@ jsasm.FS = (function () {
         }
         var t = this;
         t.deserialize();
-    }
+    };
 
     FS.prototype = {
         serialize: function () {
@@ -66,9 +66,9 @@ jsasm.FS = (function () {
             t.latest_entry = name;
             t.serialize();
             return {
-                "name": name,
-                "content": t.content[name]
-            }
+                name: name,
+                content: t.content[name],
+            };
         },
 
         save: function (name, content) {
@@ -105,7 +105,7 @@ jsasm.FS = (function () {
         save_latest: function (content) {
             var t = this;
             t.save(t.latest_entry, content);
-        }
+        },
     };
 
     return FS;

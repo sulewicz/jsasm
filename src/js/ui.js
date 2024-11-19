@@ -1,12 +1,23 @@
 jsasm = self.jsasm || {};
 jsasm.ui = (function () {
-    var cm, vm, runBtn, stepBtn, resetBtn, curReg = -1, curMem = -1, curLine = -1, errLine = -1, memCells, regCells, errorCell;
+    var cm,
+        vm,
+        runBtn,
+        stepBtn,
+        resetBtn,
+        curReg = -1,
+        curMem = -1,
+        curLine = -1,
+        errLine = -1,
+        memCells,
+        regCells,
+        errorCell;
     var fs, newBtn, deleteBtn, clearStorageBtn, fileSelect;
     var STEP_TIMEOUT = 100;
     function init(_vm, _fs) {
         fs = _fs;
         vm = _vm;
-        cm = CodeMirror(document.getElementById("editor"), { firstLineNumber: 0, lineNumbers: true, mode: 'z80' });
+        cm = CodeMirror(document.getElementById("editor"), { firstLineNumber: 0, lineNumbers: true, mode: "z80" });
         runBtn = document.getElementById("run_btn");
         runBtn.addEventListener("click", run);
         stepBtn = document.getElementById("step_btn");
@@ -94,7 +105,7 @@ jsasm.ui = (function () {
 
     function reload_filesystem() {
         fileSelect.options.length = 0;
-        fs.list().forEach(element => {
+        fs.list().forEach((element) => {
             fileSelect.appendChild(new Option(element, element));
         });
         var latest = fs.load_latest();
@@ -135,19 +146,19 @@ jsasm.ui = (function () {
         errorCell.innerHTML = "";
         errorCell.style.display = "none";
         if (curLine >= 0) {
-            cm.removeLineClass(curLine, 'background', 'curLine');
+            cm.removeLineClass(curLine, "background", "curLine");
             curLine = -1;
         }
         if (errLine >= 0) {
-            cm.removeLineClass(errLine, 'background', 'errLine');
+            cm.removeLineClass(errLine, "background", "errLine");
             errLine = -1;
         }
         if (curReg >= 0) {
-            regCells[curReg].className = '';
+            regCells[curReg].className = "";
             curReg = -1;
         }
         if (curMem >= 0) {
-            memCells[curMem].className = '';
+            memCells[curMem].className = "";
             curMem = -1;
         }
         if (spec) {
@@ -156,21 +167,21 @@ jsasm.ui = (function () {
                     errorCell.style.display = "inline-block";
                     errorCell.innerHTML = spec.error;
                     errLine = spec.line;
-                    cm.addLineClass(errLine, 'background', 'errLine');
+                    cm.addLineClass(errLine, "background", "errLine");
                 } else {
                     curLine = spec.line;
-                    cm.addLineClass(curLine, 'background', 'curLine');
+                    cm.addLineClass(curLine, "background", "curLine");
                 }
             }
             if (spec.reg >= 0) {
                 curReg = spec.reg;
                 regCells[curReg].innerHTML = vm.regs[curReg];
-                regCells[curReg].className = 'highlight';
+                regCells[curReg].className = "highlight";
             }
             if (spec.mem >= 0) {
                 curMem = spec.mem;
                 memCells[curMem].innerHTML = vm.memory[curMem];
-                memCells[curMem].className = 'highlight';
+                memCells[curMem].className = "highlight";
             }
         } else {
             for (var i = 0, l = vm.memory.length; i < l; i++) {
@@ -184,6 +195,6 @@ jsasm.ui = (function () {
     }
 
     return {
-        init: init
-    }
+        init: init,
+    };
 })();

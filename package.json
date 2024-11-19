@@ -1,0 +1,17 @@
+{
+  "name": "jsasm",
+  "version": "1.0.0",
+  "repository": "git@github.com:sulewicz/jsasm.git",
+  "author": "Szymon Ulewicz <szymon.ulewicz@coderoller.org>",
+  "license": "MIT",
+  "scripts": {
+    "start": "rm -rf .parcel-cache && parcel serve --log-level verbose src/index.html",
+    "format": "prettier --write --print-width 160 --tab-width 4 src",
+    "build": "parcel build src/index.html"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "parcel-bundler": "^1.12.5",
+    "prettier": "^3.3.3"
+  }
+}

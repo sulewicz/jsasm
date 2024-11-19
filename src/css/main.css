@@ -1,5 +1,5 @@
 body {
-    background-color: #FFCD4B;
+    background-color: #ffcd4b;
     text-align: center;
 }
 
@@ -25,7 +25,7 @@ body {
     font-size: 14px;
 }
 
-#help>h3 {
+#help > h3 {
     font-size: 16px;
 }
 
@@ -56,8 +56,8 @@ body {
 #error {
     display: none;
     max-width: 200px;
-    color: #FFFFFF;
-    background-color: #EE0000;
+    color: #ffffff;
+    background-color: #ee0000;
     margin: 5px;
     padding: 5px;
 }
@@ -79,23 +79,23 @@ td {
 }
 
 table th {
-    border: 1px solid #E78F08;
+    border: 1px solid #e78f08;
 }
 
 table td {
-    border: 1px solid #E78F08;
+    border: 1px solid #e78f08;
 }
 
 td.highlight {
-    background-color: #E78F08;
+    background-color: #e78f08;
 }
 
 .curLine {
-    background-color: #FFEF6D;
+    background-color: #ffef6d;
 }
 
 .errLine {
-    background-color: #FF0000;
+    background-color: #ff0000;
 }
 
 #memory th,
@@ -108,16 +108,17 @@ td {
     display: block;
     text-align: left;
     float: left;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     width: 500px;
     height: 330px;
 }
 
 #clear_storage_btn {
-    background-color: #FFAAAA;
+    background-color: #ffaaaa;
 }
 
-#controls, #filesystem {
+#controls,
+#filesystem {
     margin: 10px;
 }
 

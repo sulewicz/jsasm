@@ -1,112 +1,100 @@
-jsasm = self.jsasm || {};
-jsasm.FS = (function () {
-    var samples = {
+class FS {
+    static #samples = {
         "[Sample] Fill memory 1 to 40": "MOV R0,40\nMOV R1,R0\nSUB R1,1\nMOV @R1,R0\nSUB R0,1\nJNZ 2",
         "[Sample] Add 5 to 5": "MOV R0,5\nADD R0,5",
     };
-    var sample_entries = Object.keys(samples);
+    static #sample_entries = Object.keys(FS.#samples);
+    #content;
+    #entries;
+    #latest_entry;
 
-    var FS = function () {
-        if (!(this instanceof arguments.callee)) {
-            return new arguments.callee();
+    constructor() {
+        this.#deserialize();
+    }
+
+    #serialize() {
+        var payload = {
+            content: this.#content,
+            latest_entry: this.#latest_entry,
+        };
+        window.localStorage.setItem("payload", JSON.stringify(payload));
+    }
+
+    #deserialize() {
+        var payloadStr = window.localStorage.getItem("payload");
+        if (!payloadStr) {
+            this.#content = { ...FS.#samples };
+            this.#entries = Object.keys(this.#content).sort();
+            this.#latest_entry = this.#entries[0];
+            this.#serialize();
+        } else {
+            var payload = JSON.parse(payloadStr);
+            this.#content = payload.content;
+            this.#entries = Object.keys(this.#content).sort();
+            this.#latest_entry = payload.latest_entry;
         }
-        var t = this;
-        t.deserialize();
-    };
+    }
 
-    FS.prototype = {
-        serialize: function () {
-            var t = this;
-            var payload = {
-                content: t.content,
-                latest_entry: t.latest_entry,
-            };
-            window.localStorage.setItem("payload", JSON.stringify(payload));
-        },
+    reset() {
+        this.#content = { ...FS.#samples };
+        this.#entries = Object.keys(this.#content).sort();
+        this.#latest_entry = this.#entries[0];
+        this.#serialize();
+    }
 
-        deserialize: function () {
-            var t = this;
-            var payloadStr = window.localStorage.getItem("payload");
-            if (!payloadStr) {
-                t.content = { ...samples };
-                t.entries = Object.keys(t.content).sort();
-                t.latest_entry = t.entries[0];
-                t.serialize();
-            } else {
-                var payload = JSON.parse(payloadStr);
-                t.content = payload.content;
-                t.entries = Object.keys(t.content).sort();
-                t.latest_entry = payload.latest_entry;
-            }
-        },
+    list() {
+        return [...this.#entries];
+    }
 
-        reset: function () {
-            var t = this;
-            t.content = { ...samples };
-            t.entries = Object.keys(t.content).sort();
-            t.latest_entry = t.entries[0];
-            t.serialize();
-        },
+    exists(name) {
+        if (this.#content.hasOwnProperty(name)) {
+            return true;
+        }
+        return false;
+    }
 
-        list: function () {
-            var t = this;
-            return [...t.entries];
-        },
+    load(name) {
+        this.#latest_entry = name;
+        this.#serialize();
+        return {
+            name: name,
+            content: this.#content[name],
+        };
+    }
 
-        exists: function (name) {
-            var t = this;
-            if (t.content.hasOwnProperty(name)) {
-                return true;
-            }
-            return false;
-        },
+    save(name, content) {
+        if (FS.#sample_entries.indexOf(name) >= 0) {
+            return;
+        }
 
-        load: function (name) {
-            var t = this;
-            t.latest_entry = name;
-            t.serialize();
-            return {
-                name: name,
-                content: t.content[name],
-            };
-        },
+        this.#content[name] = content;
+        this.#entries = Object.keys(this.#content).sort();
+        this.#latest_entry = name;
+        this.#serialize();
+    }
 
-        save: function (name, content) {
-            var t = this;
-            if (sample_entries.indexOf(name) >= 0) {
-                return;
-            }
+    delete(name) {
+        if (FS.#sample_entries.indexOf(name) >= 0) {
+            return;
+        }
 
-            t.content[name] = content;
-            t.entries = Object.keys(t.content).sort();
-            t.latest_entry = name;
-            t.serialize();
-        },
+        delete this.#content[name];
+        this.#entries = Object.keys(this.#content).sort();
+        if (this.#latest_entry == name) {
+            this.#latest_entry = this.#entries[0];
+        }
+        this.#serialize();
+    }
 
-        delete: function (name) {
-            var t = this;
-            if (sample_entries.indexOf(name) >= 0) {
-                return;
-            }
+    load_latest() {
+        return this.load(this.#latest_entry);
+    }
 
-            delete t.content[name];
-            t.entries = Object.keys(t.content).sort();
-            if (t.latest_entry == name) {
-                t.latest_entry = t.entries[0];
-            }
-            t.serialize();
-        },
+    save_latest(content) {
+        this.save(this.#latest_entry, content);
+    }
+}
 
-        load_latest: function () {
-            var t = this;
-            return t.load(t.latest_entry);
-        },
-
-        save_latest: function (content) {
-            var t = this;
-            t.save(t.latest_entry, content);
-        },
-    };
-
-    return FS;
-})();
+module.exports = {
+    FS,
+};

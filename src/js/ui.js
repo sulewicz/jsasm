@@ -98,7 +98,7 @@ class UI {
 
     #clear_storage() {
         if (confirm("Are you sure you want to clear your local storage and all created files?")) {
-            this.#fs.#reset();
+            this.#fs.reset();
             this.#reload_filesystem();
         }
     }

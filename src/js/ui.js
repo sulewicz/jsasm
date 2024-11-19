@@ -1,200 +1,207 @@
-jsasm = self.jsasm || {};
-jsasm.ui = (function () {
-    var cm,
-        vm,
-        runBtn,
-        stepBtn,
-        resetBtn,
-        curReg = -1,
-        curMem = -1,
-        curLine = -1,
-        errLine = -1,
-        memCells,
-        regCells,
-        errorCell;
-    var fs, newBtn, deleteBtn, clearStorageBtn, fileSelect;
-    var STEP_TIMEOUT = 100;
-    function init(_vm, _fs) {
-        fs = _fs;
-        vm = _vm;
-        cm = CodeMirror(document.getElementById("editor"), { firstLineNumber: 0, lineNumbers: true, mode: "z80" });
-        runBtn = document.getElementById("run_btn");
-        runBtn.addEventListener("click", run);
-        stepBtn = document.getElementById("step_btn");
-        stepBtn.addEventListener("click", step);
-        resetBtn = document.getElementById("reset_btn");
-        resetBtn.disabled = "disabled";
-        resetBtn.addEventListener("click", reset);
-        memCells = document.getElementById("memory").getElementsByTagName("td");
-        regCells = document.getElementById("registers").getElementsByTagName("td");
-        errorCell = document.getElementById("error");
-        newBtn = document.getElementById("new_btn");
-        newBtn.addEventListener("click", new_file);
-        deleteBtn = document.getElementById("delete_btn");
-        deleteBtn.addEventListener("click", delete_file);
-        clearStorageBtn = document.getElementById("clear_storage_btn");
-        clearStorageBtn.addEventListener("click", clear_storage);
-        fileSelect = document.getElementById("file_select");
-        reload_filesystem();
-        fileSelect.addEventListener("change", file_changed);
-        cm.on("change", content_changed);
+var STEP_TIMEOUT = 100;
+
+class UI {
+    #cm;
+    #vm;
+    #runBtn;
+    #stepBtn;
+    #resetBtn;
+    #curReg = -1;
+    #curMem = -1;
+    #curLine = -1;
+    #errLine = -1;
+    #memCells;
+    #regCells;
+    #errorCell;
+    #fs;
+    #newBtn;
+    #deleteBtn;
+    #clearStorageBtn;
+    #fileSelect;
+
+    constructor(_vm, _fs) {
+        this.#fs = _fs;
+        this.#vm = _vm;
+        this.#cm = CodeMirror(document.getElementById("editor"), { firstLineNumber: 0, lineNumbers: true, mode: "z80" });
+        this.#runBtn = document.getElementById("run_btn");
+        this.#runBtn.addEventListener("click", this.#run.bind(this));
+        this.#stepBtn = document.getElementById("step_btn");
+        this.#stepBtn.addEventListener("click", this.#step.bind(this));
+        this.#resetBtn = document.getElementById("reset_btn");
+        this.#resetBtn.disabled = "disabled";
+        this.#resetBtn.addEventListener("click", this.#reset.bind(this));
+        this.#memCells = document.getElementById("memory").getElementsByTagName("td");
+        this.#regCells = document.getElementById("registers").getElementsByTagName("td");
+        this.#errorCell = document.getElementById("error");
+        this.#newBtn = document.getElementById("new_btn");
+        this.#newBtn.addEventListener("click", this.#new_file.bind(this));
+        this.#deleteBtn = document.getElementById("delete_btn");
+        this.#deleteBtn.addEventListener("click", this.#delete_file.bind(this));
+        this.#clearStorageBtn = document.getElementById("clear_storage_btn");
+        this.#clearStorageBtn.addEventListener("click", this.#clear_storage.bind(this));
+        this.#fileSelect = document.getElementById("file_select");
+        this.#reload_filesystem();
+        this.#fileSelect.addEventListener("change", this.#file_changed.bind(this));
+        this.#cm.on("change", this.#content_changed.bind(this));
     }
 
-    function reset() {
-        resetBtn.disabled = "disabled";
-        stepBtn.disabled = "";
-        runBtn.disabled = "";
-        newBtn.disabled = "";
-        deleteBtn.disabled = "";
-        clearStorageBtn.disabled = "";
-        fileSelect.disabled = "";
-        vm.reset();
-        refresh();
+    #reset() {
+        this.#resetBtn.disabled = "disabled";
+        this.#stepBtn.disabled = "";
+        this.#runBtn.disabled = "";
+        this.#newBtn.disabled = "";
+        this.#deleteBtn.disabled = "";
+        this.#clearStorageBtn.disabled = "";
+        this.#fileSelect.disabled = "";
+        this.#vm.reset();
+        this.#refresh();
     }
 
-    function step() {
-        if (!vm.initialized) {
-            vm.init(cm.getValue());
-            resetBtn.disabled = "";
-            runBtn.disabled = "disabled";
-            newBtn.disabled = "disabled";
-            deleteBtn.disabled = "disabled";
-            clearStorageBtn.disabled = "disabled";
-            fileSelect.disabled = "disabled";
+    #step() {
+        if (!this.#vm.initialized) {
+            this.#vm.init(this.#cm.getValue());
+            this.#resetBtn.disabled = "";
+            this.#runBtn.disabled = "disabled";
+            this.#newBtn.disabled = "disabled";
+            this.#deleteBtn.disabled = "disabled";
+            this.#clearStorageBtn.disabled = "disabled";
+            this.#fileSelect.disabled = "disabled";
         }
-        var ret = vm.step();
+        var ret = this.#vm.step();
         if (ret.end || ret.error) {
-            resetBtn.disabled = "";
-            stepBtn.disabled = "disabled";
-            runBtn.disabled = "disabled";
+            this.#resetBtn.disabled = "";
+            this.#stepBtn.disabled = "disabled";
+            this.#runBtn.disabled = "disabled";
         }
-        refresh(ret);
+        this.#refresh(ret);
     }
 
-    function new_file() {
+    #new_file() {
         var name = prompt("Provide file name:");
         if (!name) {
             return;
         }
-        if (fs.exists(name)) {
+        if (this.#fs.exists(name)) {
             alert("File already exists!");
             return;
         }
-        fs.save(name, "");
-        reload_filesystem();
+        this.#fs.save(name, "");
+        this.#reload_filesystem();
     }
 
-    function delete_file() {
+    #delete_file() {
         if (confirm("Are you sure you want to delete the current file?")) {
-            fs.delete(fileSelect.value);
+            this.#fs.delete(this.#fileSelect.value);
         }
-        reload_filesystem();
+        this.#reload_filesystem();
     }
 
-    function clear_storage() {
+    #clear_storage() {
         if (confirm("Are you sure you want to clear your local storage and all created files?")) {
-            fs.reset();
-            reload_filesystem();
+            this.#fs.#reset();
+            this.#reload_filesystem();
         }
     }
 
-    function file_changed(e) {
+    #file_changed(e) {
         var name = e.target.value;
-        cm.setValue(fs.load(name).content);
+        this.#cm.setValue(this.#fs.load(name).content);
     }
 
-    function reload_filesystem() {
-        fileSelect.options.length = 0;
-        fs.list().forEach((element) => {
-            fileSelect.appendChild(new Option(element, element));
+    #reload_filesystem() {
+        this.#fileSelect.options.length = 0;
+        this.#fs.list().forEach((element) => {
+            this.#fileSelect.appendChild(new Option(element, element));
         });
-        var latest = fs.load_latest();
-        fileSelect.value = latest.name;
-        cm.setValue(latest.content);
+        var latest = this.#fs.load_latest();
+        this.#fileSelect.value = latest.name;
+        this.#cm.setValue(latest.content);
     }
 
-    function content_changed(e) {
-        fs.save_latest(cm.getValue());
+    #content_changed(e) {
+        this.#fs.save_latest(this.#cm.getValue());
     }
 
-    function run() {
-        vm.reset();
-        vm.init(cm.getValue());
-        resetBtn.disabled = "";
-        stepBtn.disabled = "disabled";
-        runBtn.disabled = "disabled";
-        newBtn.disabled = "disabled";
-        deleteBtn.disabled = "disabled";
-        clearStorageBtn.disabled = "disabled";
-        fileSelect.disabled = "disabled";
-        (function () {
-            if (vm.initialized) {
-                var ret = vm.step();
-                refresh(ret);
-                if (ret.end || ret.error) {
-                    resetBtn.disabled = "";
-                    stepBtn.disabled = "disabled";
-                    runBtn.disabled = "disabled";
-                } else {
-                    setTimeout(arguments.callee, STEP_TIMEOUT);
-                }
+    #run() {
+        this.#vm.reset();
+        this.#vm.init(this.#cm.getValue());
+        this.#resetBtn.disabled = "";
+        this.#stepBtn.disabled = "disabled";
+        this.#runBtn.disabled = "disabled";
+        this.#newBtn.disabled = "disabled";
+        this.#deleteBtn.disabled = "disabled";
+        this.#clearStorageBtn.disabled = "disabled";
+        this.#fileSelect.disabled = "disabled";
+        this.#loop();
+    }
+
+    #loop() {
+        if (this.#vm.initialized) {
+            var ret = this.#vm.step();
+            this.#refresh(ret);
+            if (ret.end || ret.error) {
+                this.#resetBtn.disabled = "";
+                this.#stepBtn.disabled = "disabled";
+                this.#runBtn.disabled = "disabled";
+            } else {
+                setTimeout(this.#loop.bind(this), STEP_TIMEOUT);
             }
-        })();
+        }
     }
 
-    function refresh(spec) {
-        errorCell.innerHTML = "";
-        errorCell.style.display = "none";
-        if (curLine >= 0) {
-            cm.removeLineClass(curLine, "background", "curLine");
-            curLine = -1;
+    #refresh(spec) {
+        this.#errorCell.innerHTML = "";
+        this.#errorCell.style.display = "none";
+        if (this.#curLine >= 0) {
+            this.#cm.removeLineClass(this.#curLine, "background", "this.#curLine");
+            this.#curLine = -1;
         }
-        if (errLine >= 0) {
-            cm.removeLineClass(errLine, "background", "errLine");
-            errLine = -1;
+        if (this.#errLine >= 0) {
+            this.#cm.removeLineClass(this.#errLine, "background", "this.#errLine");
+            this.#errLine = -1;
         }
-        if (curReg >= 0) {
-            regCells[curReg].className = "";
-            curReg = -1;
+        if (this.#curReg >= 0) {
+            this.#regCells[this.#curReg].className = "";
+            this.#curReg = -1;
         }
-        if (curMem >= 0) {
-            memCells[curMem].className = "";
-            curMem = -1;
+        if (this.#curMem >= 0) {
+            this.#memCells[this.#curMem].className = "";
+            this.#curMem = -1;
         }
         if (spec) {
             if (spec.line >= 0 && !spec.end) {
                 if (spec.error) {
-                    errorCell.style.display = "inline-block";
-                    errorCell.innerHTML = spec.error;
-                    errLine = spec.line;
-                    cm.addLineClass(errLine, "background", "errLine");
+                    this.#errorCell.style.display = "inline-block";
+                    this.#errorCell.innerHTML = spec.error;
+                    this.#errLine = spec.line;
+                    this.#cm.addLineClass(this.#errLine, "background", "this.#errLine");
                 } else {
-                    curLine = spec.line;
-                    cm.addLineClass(curLine, "background", "curLine");
+                    this.#curLine = spec.line;
+                    this.#cm.addLineClass(this.#curLine, "background", "this.#curLine");
                 }
             }
             if (spec.reg >= 0) {
-                curReg = spec.reg;
-                regCells[curReg].innerHTML = vm.regs[curReg];
-                regCells[curReg].className = "highlight";
+                this.#curReg = spec.reg;
+                this.#regCells[this.#curReg].innerHTML = this.#vm.regs[this.#curReg];
+                this.#regCells[this.#curReg].className = "highlight";
             }
             if (spec.mem >= 0) {
-                curMem = spec.mem;
-                memCells[curMem].innerHTML = vm.memory[curMem];
-                memCells[curMem].className = "highlight";
+                this.#curMem = spec.mem;
+                this.#memCells[this.#curMem].innerHTML = this.#vm.memory[this.#curMem];
+                this.#memCells[this.#curMem].className = "highlight";
             }
         } else {
-            for (var i = 0, l = vm.memory.length; i < l; i++) {
-                memCells[i].innerHTML = vm.memory[i];
+            for (var i = 0, l = this.#vm.memory.length; i < l; i++) {
+                this.#memCells[i].innerHTML = this.#vm.memory[i];
             }
-            for (var i = 0, l = vm.regs.length; i < l; i++) {
-                regCells[i].innerHTML = vm.regs[i];
+            for (var i = 0, l = this.#vm.regs.length; i < l; i++) {
+                this.#regCells[i].innerHTML = this.#vm.regs[i];
             }
         }
-        cm.refresh();
+        this.#cm.refresh();
     }
+}
 
-    return {
-        init: init,
-    };
-})();
+module.exports = {
+    UI,
+};

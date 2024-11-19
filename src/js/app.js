@@ -1,7 +1,8 @@
 import { VM } from "./vm.js";
+import { UI } from "./ui.js";
 
 window.onload = (function () {
     return function () {
-        jsasm.ui.init(new VM(), new jsasm.FS());
+        let ui = new UI(new VM(), new jsasm.FS());
     };
 })();

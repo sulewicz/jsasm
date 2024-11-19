@@ -153,11 +153,11 @@ class UI {
         this.#errorCell.innerHTML = "";
         this.#errorCell.style.display = "none";
         if (this.#curLine >= 0) {
-            this.#cm.removeLineClass(this.#curLine, "background", "this.#curLine");
+            this.#cm.removeLineClass(this.#curLine, "background", "curLine");
             this.#curLine = -1;
         }
         if (this.#errLine >= 0) {
-            this.#cm.removeLineClass(this.#errLine, "background", "this.#errLine");
+            this.#cm.removeLineClass(this.#errLine, "background", "errLine");
             this.#errLine = -1;
         }
         if (this.#curReg >= 0) {
@@ -174,10 +174,10 @@ class UI {
                     this.#errorCell.style.display = "inline-block";
                     this.#errorCell.innerHTML = spec.error;
                     this.#errLine = spec.line;
-                    this.#cm.addLineClass(this.#errLine, "background", "this.#errLine");
+                    this.#cm.addLineClass(this.#errLine, "background", "errLine");
                 } else {
                     this.#curLine = spec.line;
-                    this.#cm.addLineClass(this.#curLine, "background", "this.#curLine");
+                    this.#cm.addLineClass(this.#curLine, "background", "curLine");
                 }
             }
             if (spec.reg >= 0) {

@@ -16,7 +16,7 @@ Function.prototype.curry = function () {
     };
 };
 
-let binary_op = function (operator, args) {
+let binary_op = function (lambda, args) {
     if (args.length !== 2) {
         this.ret.error = "Incorrect number of arguments";
     } else {
@@ -24,23 +24,25 @@ let binary_op = function (operator, args) {
         if ((op1 = this.getval(args[0])) == null || (op2 = this.getval(args[1])) == null) {
             return;
         } else {
-            if (operator === "/" && op2 === 0) {
+            try {
+                let result = ~~lambda(op1, op2);
+                this.setval(args[0], result);
+            } catch (ex) {
                 this.ret.error = "Cannot divide by 0";
                 return;
             }
-            this.setval(args[0], ~~eval(op1 + operator + op2));
         }
     }
 };
 
-let jump = function (cond, args) {
+let jump = function (lambda, args) {
     var t = this,
         line = 0 | args[0];
     if (!isFinite(args[0]) || line < 0 || line >= this.code.length) {
         this.ret.error = "Incorrect instruction location";
         return;
     }
-    if (cond == null || eval(this.last_val + cond + "0")) {
+    if (lambda == null || lambda(this.last_val)) {
         this.ret.line = line;
     }
 };
@@ -56,18 +58,23 @@ let COMMANDS = {
         }
     },
 
-    add: binary_op.curry("+"),
-    sub: binary_op.curry("-"),
-    mul: binary_op.curry("*"),
-    div: binary_op.curry("/"),
+    add: binary_op.curry((a, b) => a + b),
+    sub: binary_op.curry((a, b) => a - b),
+    mul: binary_op.curry((a, b) => a * b),
+    div: binary_op.curry((a, b) => {
+        if (b == 0) {
+            throw "Cannot divide by 0";
+        }
+        return a / b;
+    }),
 
     jmp: jump.curry(null),
-    jz: jump.curry("=="),
-    jnz: jump.curry("!=="),
-    jg: jump.curry(">"),
-    jng: jump.curry("<="),
-    jl: jump.curry("<"),
-    jnl: jump.curry(">="),
+    jz: jump.curry((a) => a === 0),
+    jnz: jump.curry((a) => a !== 0),
+    jg: jump.curry((a) => a > 0),
+    jng: jump.curry((a) => a <= 0),
+    jl: jump.curry((a) => a < 0),
+    jnl: jump.curry((a) => a >= 0),
 };
 
 class VM {

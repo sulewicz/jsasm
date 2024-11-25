@@ -164,3 +164,8 @@ a:active {
 .dialog-popup button {
     margin: 5px;
 }
+
+#panel table td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

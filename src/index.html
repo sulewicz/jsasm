@@ -227,6 +227,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                         </td>
                         <td>JNL 0 - Jumps to the first instruction.</td>
                     </tr>
+                    <tr>
+                        <td>INT 50</td>
+                        <td>
+                            Generates a random number between 0 and the content of R0 (exclusive) and stores the result back in R0. If R0 is less than 0
+                            generates a number between 0 and 255 (inclusive).
+                        </td>
+                        <td>INT 50 - Generates a random number in R0.</td>
+                    </tr>
                 </table>
                 <h3>Addresses</h3>
                 <table>

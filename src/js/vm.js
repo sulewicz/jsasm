@@ -36,8 +36,7 @@ let binary_op = function (lambda, args) {
 };
 
 let jump = function (lambda, args) {
-    var t = this,
-        line = 0 | args[0];
+    var line = 0 | args[0];
     if (!isFinite(args[0]) || line < 0 || line >= this.code.length) {
         this.ret.error = "Incorrect instruction location";
         return;
@@ -45,6 +44,18 @@ let jump = function (lambda, args) {
     if (lambda == null || lambda(this.last_val)) {
         this.ret.line = line;
     }
+};
+
+let INTERRUPTS = {
+    50: function () {
+        let max = 256;
+        let r0 = this.getval("R0");
+        if (r0 > 0) {
+            max = r0;
+        }
+        let result = ~~(Math.random() * max);
+        this.setval("R0", result);
+    },
 };
 
 let COMMANDS = {
@@ -75,6 +86,19 @@ let COMMANDS = {
     jng: jump.curry((a) => a <= 0),
     jl: jump.curry((a) => a < 0),
     jnl: jump.curry((a) => a >= 0),
+
+    int(args) {
+        if (args.length !== 1) {
+            this.ret.error = "Incorrect number of arguments";
+        } else {
+            let code = args[0];
+            if (INTERRUPTS.hasOwnProperty(code)) {
+                INTERRUPTS[code].call(this);
+            } else {
+                this.ret.error = "Unknown interrupt code";
+            }
+        }
+    },
 };
 
 class VM {

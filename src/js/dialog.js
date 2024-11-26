@@ -29,14 +29,14 @@ const Dialog = {
         });
     },
 
-    showTextPrompt: async function (msg) {
+    showTextPrompt: async function (msg, cancelLabel, confirmLabel) {
         let result = await Swal.fire({
             title: "",
             text: msg,
-            confirmButtonText: "OK",
+            confirmButtonText: confirmLabel || "OK",
             input: "text",
             showCancelButton: true,
-            cancelButtonText: "Cancel",
+            cancelButtonText: cancelLabel || "Cancel",
             inputValidator: (value) => {
                 if (value.trim().length == 0) {
                     return "Please enter a valid text!";
@@ -51,14 +51,14 @@ const Dialog = {
         }
     },
 
-    showIntegerPrompt: async function (msg) {
+    showIntegerPrompt: async function (msg, cancelLabel, confirmLabel) {
         let result = await Swal.fire({
             title: "",
             text: msg,
-            confirmButtonText: "OK",
+            confirmButtonText: confirmLabel || "OK",
             input: "text",
             showCancelButton: true,
-            cancelButtonText: "Cancel",
+            cancelButtonText: cancelLabel || "Cancel",
             inputPlaceholder: "Type a number...",
             inputValidator: (value) => {
                 if (isNaN(value) || !Number.isInteger(Number(value))) {
@@ -74,13 +74,13 @@ const Dialog = {
         }
     },
 
-    showBooleanPrompt: async function (msg) {
+    showBooleanPrompt: async function (msg, cancelLabel, confirmLabel) {
         let result = await Swal.fire({
             title: "",
             text: msg,
-            confirmButtonText: "Yes",
+            confirmButtonText: confirmLabel || "Yes",
             showCancelButton: true,
-            cancelButtonText: "Cancel",
+            cancelButtonText: cancelLabel || "Cancel",
             ...commonDialogParams,
         });
         if (result.isConfirmed) {

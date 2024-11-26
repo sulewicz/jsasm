@@ -47,7 +47,21 @@ let jump = function (lambda, args) {
 };
 
 let INTERRUPTS = {
-    50: function () {
+    10: async function () {
+        let input = await this._input();
+        if (input === null) {
+            this.ret.error = "Execution interrupted";
+            return;
+        }
+        this.setval("R0", input);
+    },
+    20: async function () {
+        let result = await this._output(this.getval("R0"));
+        if (!result) {
+            this.ret.error = "Execution interrupted";
+        }
+    },
+    50: async function () {
         let max = 256;
         let r0 = this.getval("R0");
         if (r0 > 0) {
@@ -87,13 +101,13 @@ let COMMANDS = {
     jl: jump.curry((a) => a < 0),
     jnl: jump.curry((a) => a >= 0),
 
-    int(args) {
+    async int(args) {
         if (args.length !== 1) {
             this.ret.error = "Incorrect number of arguments";
         } else {
             let code = args[0];
             if (INTERRUPTS.hasOwnProperty(code)) {
-                INTERRUPTS[code].call(this);
+                await INTERRUPTS[code].call(this);
             } else {
                 this.ret.error = "Unknown interrupt code";
             }
@@ -106,15 +120,17 @@ class VM {
         this.reset();
     }
 
-    init(code) {
+    init(code, input, output) {
         this.code = code.split("\n");
         this.initialized = true;
+        this._input = input;
+        this._output = output;
     }
 
-    run() {
+    async run() {
         var ret;
         while (this.line < this.code.length) {
-            ret = this.step();
+            ret = await this.step();
             if (ret.error) {
                 break;
             }
@@ -137,12 +153,12 @@ class VM {
         }
     }
 
-    step() {
+    async step() {
         var ret = (this.ret = {});
         if (this.line >= this.code.length) {
             ret.end = true;
         } else if (this.line >= 0) {
-            this.process(this.code[this.line], this.line);
+            await this.process(this.code[this.line], this.line);
             if (ret.line !== undefined) {
                 this.line = ret.line;
             }
@@ -156,7 +172,7 @@ class VM {
         return ret;
     }
 
-    process(line, no) {
+    async process(line, no) {
         var ret = this.ret;
         line = line.trim();
         if (line.length > 0 && line[0] !== "#") {
@@ -166,10 +182,10 @@ class VM {
             } else {
                 var command = line_parts[0].toLowerCase();
                 var args = line_parts[1].split(",");
-                if (!COMMANDS[command]) {
+                if (!COMMANDS.hasOwnProperty(command)) {
                     ret.error = "Unknown instruction " + command;
                 } else {
-                    COMMANDS[command].call(this, args);
+                    await COMMANDS[command].call(this, args);
                 }
             }
         }

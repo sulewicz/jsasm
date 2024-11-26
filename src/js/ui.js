@@ -2,6 +2,15 @@ import { Dialog } from "./dialog.js";
 
 var STEP_TIMEOUT = 100;
 
+async function input() {
+    let ret = await Dialog.showIntegerPrompt("Provide an integer:", "Reset", "Confirm");
+    return ret;
+}
+
+async function output(value) {
+    return await Dialog.showBooleanPrompt(String(value), "Reset", "Continue");
+}
+
 class UI {
     #cm;
     #vm;
@@ -59,9 +68,9 @@ class UI {
         this.#refresh();
     }
 
-    #step() {
+    async #step() {
         if (!this.#vm.initialized) {
-            this.#vm.init(this.#cm.getValue());
+            this.#vm.init(this.#cm.getValue(), input, output);
             this.#resetBtn.disabled = "";
             this.#runBtn.disabled = "disabled";
             this.#newBtn.disabled = "disabled";
@@ -69,7 +78,7 @@ class UI {
             this.#clearStorageBtn.disabled = "disabled";
             this.#fileSelect.disabled = "disabled";
         }
-        var ret = this.#vm.step();
+        var ret = await this.#vm.step();
         if (ret.end || ret.error) {
             this.#resetBtn.disabled = "";
             this.#stepBtn.disabled = "disabled";
@@ -125,9 +134,9 @@ class UI {
         this.#fs.save_latest(this.#cm.getValue());
     }
 
-    #run() {
+    async #run() {
         this.#vm.reset();
-        this.#vm.init(this.#cm.getValue());
+        this.#vm.init(this.#cm.getValue(), input, output);
         this.#resetBtn.disabled = "";
         this.#stepBtn.disabled = "disabled";
         this.#runBtn.disabled = "disabled";
@@ -135,12 +144,12 @@ class UI {
         this.#deleteBtn.disabled = "disabled";
         this.#clearStorageBtn.disabled = "disabled";
         this.#fileSelect.disabled = "disabled";
-        this.#loop();
+        await this.#loop();
     }
 
-    #loop() {
+    async #loop() {
         if (this.#vm.initialized) {
-            var ret = this.#vm.step();
+            var ret = await this.#vm.step();
             this.#refresh(ret);
             if (ret.end || ret.error) {
                 this.#resetBtn.disabled = "";

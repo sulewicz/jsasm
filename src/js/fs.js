@@ -63,10 +63,6 @@ class FS {
     }
 
     save(name, content) {
-        if (FS.#sample_entries.indexOf(name) >= 0) {
-            return;
-        }
-
         this.#content[name] = content;
         this.#entries = Object.keys(this.#content).sort();
         this.#latest_entry = name;

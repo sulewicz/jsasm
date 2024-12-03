@@ -61,7 +61,7 @@ const Dialog = {
             cancelButtonText: cancelLabel || "Cancel",
             inputPlaceholder: "Type a number...",
             inputValidator: (value) => {
-                if (isNaN(value) || !Number.isInteger(Number(value))) {
+                if (value.length === 0 || isNaN(value) || !Number.isInteger(Number(value))) {
                     return "Please enter a valid integer number!";
                 }
             },
